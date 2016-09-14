@@ -177,7 +177,7 @@ Reset modal's id
 ### setTemplate
 
 Reset modal's template. Once this edition is done, other modal's properties will be injected again (title and content).
-* If you don't need to add a dynamic title, do not add a 'modal-title' class to one of your element with a <p> tag inside.
+* If you don't need to add a dynamic title, do not add a 'modal-title' class to one of your element with a p HTML tag inside.
 * Same for the content, do not add a 'modal-content' class element to one of your elements, if you don't need to display the dynamic content
 ```js
 	var newTemplate = 
@@ -189,7 +189,7 @@ Reset modal's template. Once this edition is done, other modal's properties will
 
 ### setTitle
 
-Reset modal's dynamic title. (a "modal-title" class with a <p> tag inside)
+Reset modal's dynamic title. (a "modal-title" class with a p HTML tag inside)
 ```js
 	modal.setTitle('My new modal title !');
 ```
@@ -229,7 +229,9 @@ Here's a good example of how you can deal with one of these methods and combine 
 	* val (this one will not work well on IE, unfortunately)
 	* donna
 	* don
+
 These nice animations are taken from [tympanus.net](http://tympanus.net/codrops/) (http://tympanus.net/Development/ModalWindowEffects/ and http://tympanus.net/Development/DialogEffects/). A lot of thanks to these great guys for their work!
+
 ***If you want to create your own transition effect***, you can do this (into a CSS file):
 ```css
 	body > #modalBackground.show .modal[data-transition="myOwnTransition"] {
