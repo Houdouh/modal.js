@@ -1,3 +1,8 @@
+/**
+ * @name modal.js v1.0
+ * @author Jean Ehrhardt
+ * A really simple, light, efficient, and usefull modal plugin
+ */
 .modal {
 	background-color: #fff;
 	box-shadow: 0 16px 28px 0 rgba(0,0,0,0.22),0 25px 55px 0 rgba(0,0,0,0.21);
