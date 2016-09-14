@@ -224,11 +224,11 @@ Here's a good example of how you can deal with one of these methods and combine 
 ```
 
 * The CSS of the plugin contains several transition animations for your modal. The default one is a simple animation, the others are:
-	⋅⋅* scale
-	⋅⋅* fall
-	⋅⋅* val (this one will not work well on IE, unfortunately)
-	⋅⋅* donna
-	⋅⋅* don
+	* scale
+	* fall
+	* val (this one will not work well on IE, unfortunately)
+	* donna
+	* don
 These nice animations are taken from [tympanus.net](http://tympanus.net/codrops/) (http://tympanus.net/Development/ModalWindowEffects/ and http://tympanus.net/Development/DialogEffects/). A lot of thanks to these great guys for their work!
 ***If you want to create your own transition effect***, you can do this (into a CSS file):
 ```css
