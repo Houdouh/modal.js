@@ -9,7 +9,9 @@ This plugin will allow you to easily declare and customize a nice modal:
 
 ## Installation
 
-The good and old fashioned way! Include the style and script as bellow:
+The good and old fashioned way! Get the css and js files from the file navigation above (min or not, as you want).
+
+Then, include the style and script as bellow:
 
 ```html
 	<link rel="stylesheet" href="css/modal.css"/>
@@ -275,3 +277,7 @@ It will give to your modal data-status with online as value and data-quantity at
 You can use this to adapt the style of your modal (*[data-attribute="online"]) or get values with JS for some business.
 
 * ***To add an element so that you can close your modal***, such a button with a "Let's go !" indication, specify a 'modal-close' class to this one. Each DOM element with this class into your content will close the modal with a click.
+
+## Licensing
+
+This code is licensed under the MIT License.
