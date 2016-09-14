@@ -1,8 +1,7 @@
 /**
- * @name Modal.js
- * @version 1.0
+ * @name modal.js v1.0
  * @author Jean Ehrhardt
- * This library will open a customisable modal with HTML contents.
+ * A really simple, light, efficient, and usefull modal plugin
  */
 
 (function (){
