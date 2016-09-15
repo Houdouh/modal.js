@@ -218,12 +218,12 @@ Here's a good example of how you can deal with one of these methods and combine 
 * When you use an event and you want to dynamically apply a specific method to this modal, use e.detail as described in the final example of the Methods section.
 
 * You can combine [Font Awesome](http://fontawesome.io/) for example for your close button. To do this, check this example:
-```js
-	var modal = new Modal({
-		closeBtn: '',
-		closeBtnClass: 'fa fa-times'
-	});
-```
+	```js
+		var modal = new Modal({
+			closeBtn: '',
+			closeBtnClass: 'fa fa-times'
+		});
+	```
 
 * The CSS of the plugin contains several transition animations for your modal. The default one is a simple animation, the others are:
 	* scale
@@ -232,49 +232,49 @@ Here's a good example of how you can deal with one of these methods and combine 
 	* donna
 	* don
 
-These nice animations are taken from [tympanus.net](http://tympanus.net/codrops/) (http://tympanus.net/Development/ModalWindowEffects/ and http://tympanus.net/Development/DialogEffects/). A lot of thanks to these great guys for their work!
+	These nice animations are taken from [tympanus.net](http://tympanus.net/codrops/) (http://tympanus.net/Development/ModalWindowEffects/ and http://tympanus.net/Development/DialogEffects/). A lot of thanks to these great guys for their work!
 
-***If you want to create your own transition effect***, you can do this (into a CSS file):
-```css
-	body > #modalBackground.show .modal[data-transition="myOwnTransition"] {
-		-webkit-animation-name: transition-open;
-		animation-name: transition-open;
-	}
-	.modal.close[data-transition="myOwnTransition"] {
-		-webkit-animation-name: transition-close;
-		animation-name: transition-close;
-	}
-	@-webkit-keyframes transition-open {
-		0% {...}
-		100% {...}
-	}
-	@keyframes transition-open {
-		0% {...}
-		100% {...}
-	}
+	***If you want to create your own transition effect***, you can do this (into a CSS file):
+	```css
+		body > #modalBackground.show .modal[data-transition="myOwnTransition"] {
+			-webkit-animation-name: transition-open;
+			animation-name: transition-open;
+		}
+		.modal.close[data-transition="myOwnTransition"] {
+			-webkit-animation-name: transition-close;
+			animation-name: transition-close;
+		}
+		@-webkit-keyframes transition-open {
+			0% {...}
+			100% {...}
+		}
+		@keyframes transition-open {
+			0% {...}
+			100% {...}
+		}
 
-	@-webkit-keyframes transition-close {
-		0% {...}
-		100% {...}
-	}
-	@keyframes transition-close {
-		0% {...}
-		100% {...}
-	}
-```
+		@-webkit-keyframes transition-close {
+			0% {...}
+			100% {...}
+		}
+		@keyframes transition-close {
+			0% {...}
+			100% {...}
+		}
+	```
 
 * The option 'attributes' will allow you to add some data informations to your modal. For example:
-```js
-	var modal = new Modal({
-		attributes: {
-			status: 'online',
-			quantity: 12,
-			...
-		}
-	});
-```
-It will give to your modal data-status with online as value and data-quantity attributes with 12.
-You can use this to adapt the style of your modal (*[data-attribute="online"]) or get values with JS for some business.
+	```js
+		var modal = new Modal({
+			attributes: {
+				status: 'online',
+				quantity: 12,
+				...
+			}
+		});
+	```
+	It will give to your modal data-status with online as value and data-quantity attributes with 12.
+	You can use this to adapt the style of your modal (*[data-attribute="online"]) or get values with JS for some business.
 
 * ***To add an element so that you can close your modal***, such a button with a "Let's go !" indication, specify a 'modal-close' class to this one. Each DOM element with this class into your content will close the modal with a click.
 

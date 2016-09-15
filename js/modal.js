@@ -3,15 +3,10 @@
  * @author Jean Ehrhardt
  * A really simple, light, efficient, and usefull modal plugin
  */
-
 (function (){
-
-	var body = document.body,
-		classRegex = /^[a-z0-9]+[\w-]*$/i, // to identify if a className is correct
-		modalWrapper = null, // will contains the DOM modal wrapper selector
-		nbModal = 0, // identify the modal number (for a default id)
-		eventsInitialised = false, // when true, the modal events will be triggered once for all
+	var nbModal = 0, // identify the modal number (for a default id)
 		defaultModalId = '',
+		modalWrapper = null, // will contains the DOM modal wrapper selector
 		isTrigger = false; // to avoid trigger flooding
 
 	// The default modal template
@@ -60,10 +55,6 @@
 
 		instances.push(this); // save this instance to get it later
 		if (instances.length > 1) checkUniqueProp(); // check if some properties keep a unique value
-		initDOM(this.dom,this.options); // generate DOM of this modal
-		initialiseModalEvents.call(this); // Init modal events (call the method to get the context)
-
-		if (this.options.autoOpen) this.open(); // Open directly the modal with the option autoOpen
 	};
 
 
@@ -300,7 +291,7 @@
 	 * @fn overwriteDefaults
 	 * @param userOpt Object user options
 	 * @param defaultOpt Object default options
-	 * Overwrite the default options by the one set by user
+	 * Helper: overwrite the default options by the one set by user
 	 */
 	var overwriteDefaults = function (userOpt, defaultOpt) {
 		var userProp;
@@ -317,13 +308,12 @@
 
 	/**
 	 * @fn checkUniqueProp
-	 * Check if the value of a property is unique (for id or autoOpen for example)
+	 * Helper: check if the value of a property is unique (for id or autoOpen for example)
 	 */
 	var checkUniqueProp = function () {
 		var idHistory 		= [],
 			autoOpenHistory = [],
 			idValue 		= null;
-			//autoOpenValue 	= null;
 
 		for (var i=0,length=instances.length; i<length; i++) {
 			idValue = instances[i].options['id'];
@@ -336,261 +326,291 @@
 		}
 	};
 
-	/**
-	 * @fn createCloseButton
-	 * @param modal Object instance's options of the current modal
-	 * @param selector HTML selector of the modal into the DOM
-	 * Create the close button into the modal template
-	 */
-	var createCloseButton = function (options,selector) {
-		var header 		= selector.querySelector('.modal-title'),
-			createClose = document.createElement('span');
-		closeBtn = null;
 
-		// If a header is defined, add to it
-		if (header != null) {
-			closeBtn = header.appendChild(createClose);
-		}
-		// Otherwise, add it as the first modal child
-		else {
-			closeBtn = selector.appendChild(createClose);
-			selector.insertBefore(closeBtn,selector.firstChild);
-		}
-
-		closeBtn.className = 'modal-mainClose';
-
-		// Attribute all custom class specified to the main close button
-		if (options.closeBtnClass != '') {
-			var customCloseClass = options.closeBtnClass.split(' ');
-			for (var i=0,length=customCloseClass.length; i<length; i++) {
-				// If an invalid class is specified
-				if (!classRegex.test(customCloseClass[i]))
-					throw new Error('(Modal.js) An invalid custom class has been specified.');
-				else
-					closeBtn.className += (' '+customCloseClass[i]);
-			}
-		}
-		closeBtn.innerHTML = options.closeBtn; // Set the main close button content
-	};
-
-	/**
-	 * @fn initDOM
-	 * @param dom Modal dom object
-	 * @param options Modal options
-	 * Prepare the DOM for modal templates
-	 */
-	var initDOM = function (dom,options) {
-		// Prepare the modal container (only the first time)
-		if (modalWrapper == null) {
-			var wrapper = document.createElement('div');
-			wrapper.id = 'modalBackground';
-
-			// Prepend the modal container as the first body child
-			body.appendChild(wrapper);
-			body.insertBefore(wrapper,body.firstChild);
-
-			modalWrapper = document.getElementById('modalBackground');
-		}
-
-		/*
-		* Prepare modal template
-		*/
-			var newModal = document.createElement('div');
-			
-			// Id attribution (the default or the custom one)
-			newModal.id = options.id;
-
-			// Class attribution
-			newModal.className = 'modal'; // default modal class
-			if (options.customClass != '') {
-				var customClass = options.customClass.split(' ');
-				// Attribute all custom class specified to the modal
-				for (var i=0,length=customClass.length; i<length; i++) {
-					// If an invalid class is specified
-					if (!classRegex.test(customClass[i]))
-						throw new Error('(Modal.js) An invalid custom class has been specified.');
-					else
-						newModal.className += (' '+customClass[i]);
-				}
-			}
-
-			// Template attribution
-			newModal.innerHTML = options.template;
-			var header = newModal.querySelector('.modal-title'),
-				content = newModal.querySelector('.modal-content');
-
-			// Add the close button to the modal
-			if (options.addCloseBtn)
-				createCloseButton(options,newModal);
-
-			/* If the custom template set by the user
-			*  is invalid (no modal-title or modal-content class)
-			*  throw the error 
-			*/
-			if (header == null && options.title != '')
-				throw new Error('(Modal.js) Your template doesn\'t match the model. If you want to set a title, please add a "modal-title" class with a <p> inside.');
-			else if (content == null && options.content != '')
-				throw new Error('(Modal.js) Your template doesn\'t match the model. If you want to set a content, please add a "modal-content" class to your container.');
-
-			// Title
-			if (options.title != '') header.querySelector('p').innerHTML = options.title;
-
-			// Content
-			if (options.content != '') content.innerHTML = options.content;
-
-			// Style attribution
-			newModal.style.height = options.height+'px';
-			newModal.style.width  = options.width+'px';
-			newModal.style.animationDuration = options.transitionDuration+'ms'; // animation duration
-			// Children need to be animated too
-			if (options.transition == 'donna') {
-				var children = newModal.childNodes;
-				for (var i=0,length=children.length; i<length; i++) {
-					children[i].style.animationDuration = options.transitionDuration+'ms';
-				}
-			}
-
-			// Datas-attribute attribution
-			newModal.setAttribute('data-transition',options.transition); // Add transition state
-			var attr;
-			for (attr in options.attributes) {
-				newModal.setAttribute('data-'+attr,options.attributes[attr]);
-			}
-
-		// Insert modal into the wrapper
-		modalWrapper.appendChild(newModal);
-
-		// DOM saving (attribute events to them with initialiseModalEvents)
-		dom.id = document.getElementById(newModal.id);
-		if (options.addCloseBtn) dom.closeBtn = closeBtn;
-	};
-
-	/**
-	 * @fn initialiseModalEvents
-	 * Initialise events for each modal
-	 */
-	var initialiseModalEvents = function () {
-		// Click on the close button
-		if (this.options.addCloseBtn)
-			this.dom.closeBtn.addEventListener('click', this.close.bind(this));
-	};
-
-
-	/**
-	 * @fn findInstance
-	 * @param idModal Id of the target modal
-	 * Find instance of a modal according to the id
-	 */
-	var findInstance = function (idModal) {
-		var instance = null;
-
-		for (var i=0,length=instances.length; i<length; i++) {
-			if (instances[i].options.id === idModal) {
-				instance = instances[i];
-				break;
-			}
-		}
-
-		// This instance no longer exists
-		if (instance == null)
-			throw new Error('(Modal.js) The according modal instance no longer exists.');
-
-		return instance;
-	};
 
 	/*
-	* Body and DOM functions
+	* ******************************
+	* @fn ready
+	* The document has to be ready to build modals into the DOM
 	*/
-		var target, modalTarget, modals = null;
+	var ready = function () {
+		var body = document.body,
+			classRegex = /^[a-z0-9]+[\w-]*$/i; // to identify if a className is correct
 
 		/**
-		 * @fn openDynamic
-		 * @param Event clicked
-		 * Open a modal thanks to the DOM and the data-modal attribute
+		 * @fn createCloseButton
+		 * @param modal Object instance's options of the current modal
+		 * @param selector HTML selector of the modal into the DOM
+		 * Create the close button into the modal template
 		 */
-		var openDynamic = function (e) {
-			target = e.target;
-			modalTarget = target.getAttribute('data-modal');
+		var createCloseButton = function (options,selector) {
+			var header 		= selector.querySelector('.modal-title'),
+				createClose = document.createElement('span');
+			closeBtn = null;
 
-			// If a data-modal is specified, find the according thanks to the id
-			if (modalTarget) {
-				var instance = findInstance(modalTarget);
-				instance.open(); // open it
+			// If a header is defined, add to it
+			if (header != null) {
+				closeBtn = header.appendChild(createClose);
 			}
+			// Otherwise, add it as the first modal child
+			else {
+				closeBtn = selector.appendChild(createClose);
+				selector.insertBefore(closeBtn,selector.firstChild);
+			}
+
+			closeBtn.className = 'modal-mainClose';
+
+			// Attribute all custom class specified to the main close button
+			if (options.closeBtnClass != '') {
+				var customCloseClass = options.closeBtnClass.split(' ');
+				for (var i=0,length=customCloseClass.length; i<length; i++) {
+					// If an invalid class is specified
+					if (!classRegex.test(customCloseClass[i]))
+						throw new Error('(Modal.js) An invalid custom class has been specified.');
+					else
+						closeBtn.className += (' '+customCloseClass[i]);
+				}
+			}
+			closeBtn.innerHTML = options.closeBtn; // Set the main close button content
+		};
+
+
+		/**
+		 * @fn initDOM
+		 * @param dom Modal dom object
+		 * @param options Modal options
+		 * Prepare the DOM for modal templates
+		 */
+		var initDOM = function (dom,options) {
+			// Prepare the modal container (only the first time)
+			if (modalWrapper == null) {
+				var wrapper = document.createElement('div');
+				wrapper.id = 'modalBackground';
+
+				// Prepend the modal container as the first body child
+				body.appendChild(wrapper);
+				body.insertBefore(wrapper,body.firstChild);
+
+				modalWrapper = document.getElementById('modalBackground');
+			}
+
+			/*
+			* Prepare modal template
+			*/
+				var newModal = document.createElement('div');
+				
+				// Id attribution (the default or the custom one)
+				newModal.id = options.id;
+
+				// Class attribution
+				newModal.className = 'modal'; // default modal class
+				if (options.customClass != '') {
+					var customClass = options.customClass.split(' ');
+					// Attribute all custom class specified to the modal
+					for (var i=0,length=customClass.length; i<length; i++) {
+						// If an invalid class is specified
+						if (!classRegex.test(customClass[i]))
+							throw new Error('(Modal.js) An invalid custom class has been specified.');
+						else
+							newModal.className += (' '+customClass[i]);
+					}
+				}
+
+				// Template attribution
+				newModal.innerHTML = options.template;
+				var header = newModal.querySelector('.modal-title'),
+					content = newModal.querySelector('.modal-content');
+
+				// Add the close button to the modal
+				if (options.addCloseBtn)
+					createCloseButton(options,newModal);
+
+				/* If the custom template set by the user
+				*  is invalid (no modal-title or modal-content class)
+				*  throw the error 
+				*/
+				if (header == null && options.title != '')
+					throw new Error('(Modal.js) Your template doesn\'t match the model. If you want to set a title, please add a "modal-title" class with a <p> inside.');
+				else if (content == null && options.content != '')
+					throw new Error('(Modal.js) Your template doesn\'t match the model. If you want to set a content, please add a "modal-content" class to your container.');
+
+				// Title
+				if (options.title != '') header.querySelector('p').innerHTML = options.title;
+
+				// Content
+				if (options.content != '') content.innerHTML = options.content;
+
+				// Style attribution
+				newModal.style.height = options.height+'px';
+				newModal.style.width  = options.width+'px';
+				newModal.style.animationDuration = options.transitionDuration+'ms'; // animation duration
+				// Children need to be animated too
+				if (options.transition == 'donna') {
+					var children = newModal.childNodes;
+					for (var i=0,length=children.length; i<length; i++) {
+						children[i].style.animationDuration = options.transitionDuration+'ms';
+					}
+				}
+
+				// Datas-attribute attribution
+				newModal.setAttribute('data-transition',options.transition); // Add transition state
+				var attr;
+				for (attr in options.attributes) {
+					newModal.setAttribute('data-'+attr,options.attributes[attr]);
+				}
+
+			// Insert modal into the wrapper
+			modalWrapper.appendChild(newModal);
+
+			// DOM saving (attribute events to them with initialiseModalEvents)
+			dom.id = document.getElementById(newModal.id);
+			if (options.addCloseBtn) dom.closeBtn = closeBtn;
 		};
 
 		/**
-		 * @fn closeByOverlay
-		 * @param Event clicked
-		 * @note This function is the same for all modals so we need to call it outside of the initialiseModalEvents method
-		 * Close the visible modal when the overlay is clicked
+		 * @fn initialiseModalEvents
+		 * Initialise events for each modal
 		 */
-		var closeByOverlay = function (e) {
-			target = e.target;
-			if (target.id === 'modalBackground') {
+		var initialiseModalEvents = function () {
+			// Click on the close button
+			if (this.options.addCloseBtn)
+				this.dom.closeBtn.addEventListener('click', this.close.bind(this));
+		};
+
+
+		/**
+		 * @fn findInstance
+		 * @param idModal Id of the target modal
+		 * Helper: find instance of a modal according to the id
+		 */
+		var findInstance = function (idModal) {
+			var instance = null;
+
+			for (var i=0,length=instances.length; i<length; i++) {
+				if (instances[i].options.id === idModal) {
+					instance = instances[i];
+					break;
+				}
+			}
+
+			// This instance no longer exists
+			if (instance == null)
+				throw new Error('(Modal.js) The according modal instance no longer exists.');
+
+			return instance;
+		};
+
+		/*
+		* Body and DOM functions
+		*/
+			var target, modalTarget, modals = null;
+
+			/**
+			 * @fn openDynamic
+			 * @param Event clicked
+			 * Open a modal thanks to the DOM and the data-modal attribute
+			 */
+			var openDynamic = function (e) {
+				target = e.target;
+				modalTarget = target.getAttribute('data-modal');
+
+				// If a data-modal is specified, find the according thanks to the id
+				if (modalTarget) {
+					var instance = findInstance(modalTarget);
+					instance.open(); // open it
+				}
+			};
+
+			/**
+			 * @fn closeByOverlay
+			 * @param Event clicked
+			 * @note This function is the same for all modals so we need to call it outside of the initialiseModalEvents method
+			 * Close the visible modal when the overlay is clicked
+			 */
+			var closeByOverlay = function (e) {
+				target = e.target;
+				if (target.id === 'modalBackground') {
+					modals = document.querySelectorAll('#modalBackground .modal');
+					// First, find the visible modal
+					for (var i=0,length=modals.length; i<length; i++) {
+						if (modals[i].style.display == 'block') {
+							var instance = findInstance(modals[i].id); // deduce instance of this modal
+							// Close this modal only if the closeByOverlay option is set
+							if (instance.options.closeByOverlay)
+								instance.close(); // close it
+							break;
+						}
+					}
+				}
+			};
+
+			/**
+			 * @fn closeByDOM
+			 * @param Event clicked
+			 * Close the visible modal when a modal-close element is clicked
+			 */
+			var closeByDOM = function (e) {
+				target = e.target;
+				if (target.className === 'modal-close') {
+					modals = document.querySelectorAll('#modalBackground .modal');
+					// First, find the visible modal
+					for (var i=0,length=modals.length; i<length; i++) {
+						if (modals[i].style.display == 'block') {
+							var instance = findInstance(modals[i].id); // deduce instance of this modal
+							instance.close(); // close it
+							break;
+						}
+					}
+				}
+			};
+
+			/**
+			 * @fn closeByEsc
+			 * Close the visible modal if the Esc key is pressed
+			 */
+			var closeByEsc = function () {
 				modals = document.querySelectorAll('#modalBackground .modal');
 				// First, find the visible modal
 				for (var i=0,length=modals.length; i<length; i++) {
 					if (modals[i].style.display == 'block') {
 						var instance = findInstance(modals[i].id); // deduce instance of this modal
-						// Close this modal only if the closeByOverlay option is set
-						if (instance.options.closeByOverlay)
+						// Close this modal only if the escapeClose option is set
+						if (instance.options.escapeClose)
 							instance.close(); // close it
 						break;
 					}
 				}
-			}
-		};
+			};
 
-		/**
-		 * @fn closeByDOM
-		 * @param Event clicked
-		 * Close the visible modal when a modal-close element is clicked
-		 */
-		var closeByDOM = function (e) {
-			target = e.target;
-			if (target.className === 'modal-close') {
-				modals = document.querySelectorAll('#modalBackground .modal');
-				// First, find the visible modal
-				for (var i=0,length=modals.length; i<length; i++) {
-					if (modals[i].style.display == 'block') {
-						var instance = findInstance(modals[i].id); // deduce instance of this modal
-						instance.close(); // close it
-						break;
-					}
-				}
-			}
-		};
+			// DOM deleguation
+			body.addEventListener("click", function (e) {
+				openDynamic(e);
+				closeByOverlay(e);
+				closeByDOM(e);
+			});
 
-		/**
-		 * @fn closeByEsc
-		 * Close the visible modal if the Esc key is pressed
-		 */
-		var closeByEsc = function () {
-			modals = document.querySelectorAll('#modalBackground .modal');
-			// First, find the visible modal
-			for (var i=0,length=modals.length; i<length; i++) {
-				if (modals[i].style.display == 'block') {
-					var instance = findInstance(modals[i].id); // deduce instance of this modal
-					// Close this modal only if the escapeClose option is set
-					if (instance.options.escapeClose)
-						instance.close(); // close it
-					break;
-				}
-			}
-		};
+			document.addEventListener('keydown', function (e) {
+				// If a modal is open and if the key is Esc keycode
+				if ((new RegExp('(^| )' + 'show' + '( |$)', 'gi').test(modalWrapper.className)) && e.keyCode == 27)
+					closeByEsc();
+			});
 
+		/*
+		* Finally, the DOM is ready, modals can be created
+		*/
+		var instance = null;
+		for (var i=0,length=instances.length; i<length; i++) {
+			instance = instances[i];
 
-		// DOM deleguation
-		body.addEventListener("click", function (e) {
-			openDynamic(e);
-			closeByOverlay(e);
-			closeByDOM(e);
-		});
+			initDOM(instance.dom,instance.options); // generate DOM of this modal
+			initialiseModalEvents.call(instance); // Init modal events (call the method to get the context)
 
-		document.addEventListener('keydown', function (e) {
-			// If a modal is open and if the key is Esc keycode
-			if ((new RegExp('(^| )' + 'show' + '( |$)', 'gi').test(modalWrapper.className)) && e.keyCode == 27)
-				closeByEsc();
-		});
+			if (instance.options.autoOpen) instance.open(); // Open directly the modal with the option autoOpen
+		}
+	};
+	// Trigger before any event as ready with jQuery or onload in vanilla
+	document.onreadystatechange = function () {
+		if (document.readyState == 'interactive')
+			ready();
+	};
 }());
