@@ -112,6 +112,11 @@ These events are triggered all along the open/close cycle.
 Here's an example of how you can deal with one of these events:
 
 ```js
+	/* Your DOM needs to be ready, obviously. 
+		- with jQuery, use document.ready()
+		- in vanilla (after all, you can do all of this without jQuery!), use window.onload or document.addEventListener('DOMContentLoaded')
+	*/
+
 	var myModal = document.getElementById('myModal');
 	myModal.addEventListener('open', function (e) {
 		// use e.detail to access to the modal object
