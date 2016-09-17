@@ -60,7 +60,6 @@
 
 		// If a new modal is init after document generation, create it
 		if (body != null) {
-			console.log('new Modal !');
 			initDOM(this.dom,this.options); // generate DOM of this modal
 			initialiseModalEvents.call(this); // Init modal events (call the method to get the context)
 		}
