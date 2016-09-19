@@ -35,10 +35,10 @@ body > #modalBackground {
 	top: 0;
 	width: 100%;
 	z-index: -1;
-	-webkit-transition-property: background-color;
-	-moz-transition-property: background-color;
-	-o-transition-property: background-color;
-	transition-property: background-color;
+	-webkit-transition-property: all;
+	-moz-transition-property: all;
+	-o-transition-property: all;
+	transition-property: all;
 	-webkit-transition-timing-function: ease;
 	-moz-transition-timing-function: ease;
 	-o-transition-timing-function: ease;

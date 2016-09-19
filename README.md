@@ -92,6 +92,8 @@ Here's an options list for your modal with the default value:
 		escapeClose: true, // Press 'Esc' will close the modal
 		height: 400, // the default height
 		id: 'modal'+NbModal, // this id needs to be unique. By default, it will be 'modal1' where your modal is the first declared
+		responsive: true, // your modal is reponsive by default!
+		responsiveBrink: 50, // in px, will be the separtation between your modal and the window (for each sides, so divided by 2, here it will be 25 to left and right)
 		template: modalTemplate, // template of the modal, see Template section for more details
 		title: '', // modal's title (display into the <p> tag of 'modal-title' class of your template))
 		transition: 'fade', // transition CSS reference. See Transition effect part into the Tips section for more details
@@ -112,7 +114,7 @@ These events are triggered all along the open/close cycle.
 Here's an example of how you can deal with one of these events:
 
 ```js
-	/* Your DOM needs to be ready, obviously. 
+	/* Your document needs to be ready, obviously. 
 		- with jQuery, use document.ready()
 		- in vanilla (after all, you can do all of this without jQuery!), use window.onload or document.addEventListener('DOMContentLoaded')
 	*/

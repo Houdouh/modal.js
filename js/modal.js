@@ -7,6 +7,7 @@
 	var nbModal = 0, // identify the modal number (for a default id)
 		defaultModalId = '',
 		modalWrapper = null, // will contains the DOM modal wrapper selector
+		isClosable = true, // to avoid close an unfinished modal's animation
 		isTrigger = false, // to avoid trigger flooding
 		body = null, // document.body when it will be ready
 		classRegex = /^[a-z0-9]+[\w-]*$/i; // to identify if a className is correct
@@ -45,6 +46,8 @@
 		this.options.escapeClose    	= true; // Press 'Esc' will close the modal
 		this.options.height 	    	= 400; // the default height
 		this.options.id 		    	= defaultModalId; // by default a modal has this id
+		this.options.responsive         = true; // modal responsive or not
+		this.options.responsiveBrink    = 50; // nb of px that the responsive modal has to leave between window's sides (/2 for each side, so 25 both sides)
 		this.options.template 	    	= modalTemplate; // template of the modal
 		this.options.title 		    	= ''; // modal's title
 		this.options.transition    		= 'fade'; // transition CSS reference
@@ -78,6 +81,8 @@
 
 		var modal = document.getElementById(this.options.id); // The according modal into the DOM
 
+		isClosable = false;
+
 		modalWrapper.style.transitionDuration = this.options.transitionDuration+'ms'; // set transition duration
 
 		// Init custom events with the according context
@@ -95,9 +100,21 @@
 		modalWrapper.className = 'show';
 		this.dom.id.style.display = 'block';
 
+		// Responsive handling
+		if (this.options.responsive) {
+			var responsiveBrink = screen.width-this.options.responsiveBrink,
+				originalWidth = this.options.width, // the original modal's width as initialized
+				reduce = responsiveBrink <= modal.offsetWidth, // modal needs here to be reduce
+				stretch = responsiveBrink > modal.offsetWidth && modal.offsetWidth < originalWidth; // modals has been reduced and have to been stretched to get its original width
+
+			if (reduce || stretch)
+				modal.style.width = (responsiveBrink > originalWidth ? originalWidth : responsiveBrink)+'px'; // New width can't exceed the original one
+		}
+
 		// Trigger opened event (according to the transitionDuration)
 		setTimeout(function () {
 			modal.dispatchEvent(opened);
+			isClosable = true; // modal can now be closed
 		}, this.options.transitionDuration);
 	};
 
@@ -108,6 +125,10 @@
 	 * Close the current modal (thisModal)
 	 */
 	Modal.prototype.close = function () {
+		// Avoid close an unfinished modal's animation
+		if (!isClosable)
+			return;
+
 		var _     = this,
 			modal = document.getElementById(this.options.id); // The according modal into the DOM
 
@@ -474,6 +495,31 @@
 	};
 
 	/**
+	 * @fn resizeModal
+	 * @param Object modal according instance
+	 * Resize a responsive open modal if the brink is exceed
+	 */
+	var resizeModal = function (modal) {
+		modals = document.querySelectorAll('#modalBackground .modal');
+		// First, find the visible modal
+		for (var i=0,length=modals.length; i<length; i++) {
+			if (modals[i].style.display == 'block') {
+				var instance = findInstance(modals[i].id); // deduce instance of this modal
+				// Conisder this modal only if the responsive option is set
+				if (instance.options.responsive) {
+					var responsiveBrink = screen.width-instance.options.responsiveBrink,
+						reduce = responsiveBrink <= modals[i].offsetWidth, // modal needs here to be reduce
+						stretch = responsiveBrink > modals[i].offsetWidth && modals[i].offsetWidth < instance.options.width; // modals has been reduced and have to been stretched to get its original width
+
+					if (reduce || stretch)
+						modals[i].style.width = responsiveBrink+'px';
+				}
+				break;
+			}
+		}
+	};
+
+	/**
 	 * @fn findInstance
 	 * @param idModal Id of the target modal
 	 * Helper: find instance of a modal according to the id
@@ -590,14 +636,24 @@
 			// DOM deleguation
 			body.addEventListener("click", function (e) {
 				openDynamic(e);
-				closeByOverlay(e);
 				closeByDOM(e);
+
+				// To avoid trigger several close
+				if ((new RegExp('(^| )' + 'show' + '( |$)', 'gi').test(modalWrapper.className)))
+					closeByOverlay(e);
 			});
 
 			document.addEventListener('keydown', function (e) {
 				// If a modal is open and if the key is Esc keycode
 				if ((new RegExp('(^| )' + 'show' + '( |$)', 'gi').test(modalWrapper.className)) && e.keyCode == 27)
 					closeByEsc();
+			});
+
+			// Resize a responsive modal
+			window.addEventListener('resize', function () {
+				// If a modal is open
+				if ((new RegExp('(^| )' + 'show' + '( |$)', 'gi').test(modalWrapper.className)))
+					resizeModal();
 			});
 
 		/*
