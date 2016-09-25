@@ -37,8 +37,8 @@ Then, into your script (in an HTML or JS file, but after your modal.js declarati
 ```js
 	var modal = new Modal({
 		autoOpen: true, // this modal will be immediately open when the page is loaded
-		content: 'My modal content !', // why not use a DOM element that you can extract thanks to innerHTML or with jQuery ?,
-		customClass: 'myOwnClass andAntoherOne',
+		content: 'My modal content !', // why not use a DOM element that you can extract thanks to innerHTML or with jQuery?,
+		customClass: 'myOwnClass andAnotherOne',
 		height: 500,
 		id: 'myModal', // as into the data-modal button !
 		title: 'My modal title !', // use a simple text here, but you can use HTML too !
@@ -90,17 +90,23 @@ Here's an options list for your modal with the default value:
 		content: '', // modal's content (display into the 'modal-content' class of your template)
 		customClass: '', // class in addition to the modal default class
 		escapeClose: true, // Press 'Esc' will close the modal
-		height: 400, // the default height
+		height: null, // auto CSS value by default. Use an int to set one (400 for example). See 'Modal sizes' section above
 		id: 'modal'+NbModal, // this id needs to be unique. By default, it will be 'modal1' where your modal is the first declared
-		responsive: true, // your modal is reponsive by default!
+		responsive: true, // your modal is reponsive by default (only if a specific width is set, see 'Modal sizes' section above)
 		responsiveBrink: 50, // in px, will be the separtation between your modal and the window (for each sides, so divided by 2, here it will be 25 to left and right)
 		template: modalTemplate, // template of the modal, see Template section for more details
 		title: '', // modal's title (display into the <p> tag of 'modal-title' class of your template))
 		transition: 'fade', // transition CSS reference. See Transition effect part into the Tips section for more details
 		transitionDuration: 400, // duration close/open animation (in ms)
-		width: 500 // the default width
+		width: null // auto CSS value by default. Use an int to set one (500 for example). See 'Modal sizes' section above
 	};
 ```
+
+### Modal sizes
+
+* Your modal's height and width are null by default, which means that sizes will adapat according to the modal's content.
+* However, you can set a specific height and width as you want (with an int value)
+* ***About responsive***: it's handling only if a specific width is set. Height and width CSS values are 'auto' by default, so it'll be automatically responsive. But this one can not match your wish, so it'll be up to you to adapt your modal.
 
 ## Events
 
