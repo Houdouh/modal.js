@@ -44,7 +44,7 @@
 		this.options.content 	    	= ''; // modal's content
 		this.options.customClass    	= ''; // default class set
 		this.options.escapeClose    	= true; // Press 'Esc' will close the modal
-		this.options.height 	    	= 400; // the default height
+		this.options.height 	    	= null; // there is no specific height by default (will be 'auto' in CSS)
 		this.options.id 		    	= defaultModalId; // by default a modal has this id
 		this.options.responsive         = true; // modal responsive or not
 		this.options.responsiveBrink    = 50; // nb of px that the responsive modal has to leave between window's sides (/2 for each side, so 25 both sides)
@@ -52,7 +52,7 @@
 		this.options.title 		    	= ''; // modal's title
 		this.options.transition    		= 'fade'; // transition CSS reference
 		this.options.transitionDuration = 400; // duration close/open animation (in ms)
-		this.options.width 		    	= 500; // the default width
+		this.options.width 		    	= null; // there is no specific width by default (will be 'auto' in CSS)
 
 		// Check if the user has set personnal properties
 		if (typeof userOpt === 'object')
@@ -71,10 +71,12 @@
 
 	/**
 	 * @fn open
+	 * @param target Selector when the modal 
+	   is open in a dynamic way (thanks to the data-modal)
 	 * Public method
 	 * Open the modal
 	 */
-	Modal.prototype.open = function () {
+	Modal.prototype.open = function (target) {
 		// Avoid multiple trigger
 		if (isTrigger)
 			return;
@@ -86,10 +88,11 @@
 		modalWrapper.style.transitionDuration = this.options.transitionDuration+'ms'; // set transition duration
 
 		// Init custom events with the according context
+		var param = {modal: this, target: target};
 		var beforeOpen = document.createEvent("CustomEvent"),
-			opened     = document.createEvent("CustomEvent");
-		beforeOpen.initCustomEvent('beforeOpen', false, false, this);
-		opened.initCustomEvent('opened', false, false, this);
+			open       = document.createEvent("CustomEvent");
+		beforeOpen.initCustomEvent('beforeOpen', false, false, param);
+		open.initCustomEvent('open', false, false, param);
 
 		// Trigger beforeOpen event
 		setTimeout(function () {
@@ -100,8 +103,8 @@
 		modalWrapper.className = 'show';
 		this.dom.id.style.display = 'block';
 
-		// Responsive handling
-		if (this.options.responsive) {
+		// Responsive handling (only if a specific width is set)
+		if (this.options.responsive && this.options.width != null) {
 			var responsiveBrink = screen.width-this.options.responsiveBrink,
 				originalWidth = this.options.width, // the original modal's width as initialized
 				reduce = responsiveBrink <= modal.offsetWidth, // modal needs here to be reduce
@@ -113,7 +116,7 @@
 
 		// Trigger opened event (according to the transitionDuration)
 		setTimeout(function () {
-			modal.dispatchEvent(opened);
+			modal.dispatchEvent(open);
 			isClosable = true; // modal can now be closed
 		}, this.options.transitionDuration);
 	};
@@ -135,10 +138,11 @@
 		isTrigger = true;
 
 		// Init custom events with the according context
+		var param = {modal: _};
 		var beforeClose = document.createEvent("CustomEvent"),
 			closed      = document.createEvent("CustomEvent");
-		beforeClose.initCustomEvent('beforeClose', false, false, _);
-		closed.initCustomEvent('closed', false, false, _);
+		beforeClose.initCustomEvent('beforeClose', false, false, param);
+		closed.initCustomEvent('closed', false, false, param);
 
 		// Trigger beforeClose event
 		setTimeout(function () {
@@ -224,15 +228,19 @@
 	Modal.prototype.setSize = function (height,width) {
 		var modal = document.getElementById(this.options.id); // The according modal into the DOM
 
-		if (typeof height == 'number' && typeof width == 'number') {
-			this.options.height = height;
-			this.options.width = width;
+		this.options.height = height;
+		this.options.width = width;
 
+		if (height != null)
 			modal.style.height = height+'px';
-			modal.style.width = width+'px';
-		}
 		else
-			throw new Error('(Modal.js) Your sizes are incorrect.');
+			modal.style.height = ''; // remove the inline property
+
+
+		if (width != null)
+			modal.style.width = width+'px';
+		else
+			modal.style.width = ''; // remove the inline property
 	};
 
 	/**
@@ -247,7 +255,6 @@
 		if (typeof id == 'string') {
 			this.options.id = id;
 			modal.id = id;
-			console.log(this.dom);
 			checkUniqueProp(); // check if the new id is unique
 		}
 		else
@@ -458,8 +465,14 @@
 			if (options.content != '') content.innerHTML = options.content;
 
 			// Style attribution
-			newModal.style.height = options.height+'px';
-			newModal.style.width  = options.width+'px';
+			if (options.height != null)
+				newModal.style.height = options.height+'px';
+			if (options.width != null) {
+				newModal.style.width = options.width+'px';
+				// Min width smaller than the one set in CSS
+				if (options.width < 250)
+					newModal.style.minWidth = options.width+'px';
+			}
 			newModal.style.animationDuration = options.transitionDuration+'ms'; // animation duration
 			// Children need to be animated too
 			if (options.transition == 'donna') {
@@ -505,8 +518,8 @@
 		for (var i=0,length=modals.length; i<length; i++) {
 			if (modals[i].style.display == 'block') {
 				var instance = findInstance(modals[i].id); // deduce instance of this modal
-				// Conisder this modal only if the responsive option is set
-				if (instance.options.responsive) {
+				// Conisder this modal only if the responsive option and if a specific width are set
+				if (instance.options.responsive && instance.options.width != null) {
 					var responsiveBrink = screen.width-instance.options.responsiveBrink,
 						reduce = responsiveBrink <= modals[i].offsetWidth, // modal needs here to be reduce
 						stretch = responsiveBrink > modals[i].offsetWidth && modals[i].offsetWidth < instance.options.width; // modals has been reduced and have to been stretched to get its original width
@@ -568,7 +581,7 @@
 				// If a data-modal is specified, find the according thanks to the id
 				if (modalTarget) {
 					var instance = findInstance(modalTarget);
-					instance.open(); // open it
+					instance.open(target); // open it
 				}
 			};
 

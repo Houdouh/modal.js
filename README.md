@@ -37,11 +37,11 @@ Then, into your script (in an HTML or JS file, but after your modal.js declarati
 ```js
 	var modal = new Modal({
 		autoOpen: true, // this modal will be immediately open when the page is loaded
-		content: 'My modal content !', // why not use a DOM element that you can extract thanks to innerHTML or with jQuery?,
+		content: 'My modal content!', // why not use a DOM element that you can extract thanks to innerHTML or with jQuery?,
 		customClass: 'myOwnClass andAnotherOne',
 		height: 500,
-		id: 'myModal', // as into the data-modal button !
-		title: 'My modal title !', // use a simple text here, but you can use HTML too !
+		id: 'myModal', // as into the data-modal button!
+		title: 'My modal title!', // use a simple text here, but you can use HTML too!
 		transition: 'fade', // for the transition effect
 		width: 700
 	});
@@ -90,15 +90,15 @@ Here's an options list for your modal with the default value:
 		content: '', // modal's content (display into the 'modal-content' class of your template)
 		customClass: '', // class in addition to the modal default class
 		escapeClose: true, // Press 'Esc' will close the modal
-		height: null, // auto CSS value by default. Use an int to set one (400 for example). See 'Modal sizes' section above
+		height: null, // auto CSS value by default. Use an int to set one (400 for example). See 'Modal sizes' section below
 		id: 'modal'+NbModal, // this id needs to be unique. By default, it will be 'modal1' where your modal is the first declared
-		responsive: true, // your modal is reponsive by default (only if a specific width is set, see 'Modal sizes' section above)
+		responsive: true, // your modal is reponsive by default (only if a specific width is set, see 'Modal sizes' section below)
 		responsiveBrink: 50, // in px, will be the separtation between your modal and the window (for each sides, so divided by 2, here it will be 25 to left and right)
 		template: modalTemplate, // template of the modal, see Template section for more details
 		title: '', // modal's title (display into the <p> tag of 'modal-title' class of your template))
 		transition: 'fade', // transition CSS reference. See Transition effect part into the Tips section for more details
 		transitionDuration: 400, // duration close/open animation (in ms)
-		width: null // auto CSS value by default. Use an int to set one (500 for example). See 'Modal sizes' section above
+		width: null // auto CSS value by default. Use an int to set one (500 for example). See 'Modal sizes' section below
 	};
 ```
 
@@ -127,10 +127,13 @@ Here's an example of how you can deal with one of these events:
 
 	var myModal = document.getElementById('myModal');
 	myModal.addEventListener('open', function (e) {
-		// use e.detail to access to the modal object
-		console.log('My modal is now open !');
+		// use e.detail to access to the details
+		console.log('My modal is now open!');
 	});
 ```
+
+Use e.detail to access to the current modal details.
+***To get the target for beforeOpen/open events***: If you want to get the DOM element when your modal is open in a dynamic way (thanks to the data-modal attribute), ***use e.detail.target***.
 
 ## Methods
 
@@ -171,7 +174,7 @@ Reset closeByOverlay option
 
 Reset modal's content
 ```js
-	var newContent = '<p>A new content !</p>';
+	var newContent = '<p>A new content!</p>';
 	modal.setContent(newContent);
 ```
 
@@ -186,7 +189,7 @@ Reset modal's sizes
 
 Reset modal's id
 ```js
-	modal.setId('myNewId'); // watch out, this id must remain unique !
+	modal.setId('myNewId'); // watch out, this id must remain unique!
 ```
 
 ### setTemplate
@@ -199,14 +202,14 @@ Reset modal's template. Once this edition is done, other modal's properties will
 		'<div class="modal-title"><a href="#">...</a><p>(Here will be push my dynamic title)</p></div>'+
 		'<article><h2>A title for my content</h2><div class="modal-content">(Here will be push my dynamic content)</div></article>'
 	;
-	modal.setTemplate(newTemplate); // the template will be reset with the dynamic title and content !
+	modal.setTemplate(newTemplate); // the template will be reset with the dynamic title and content!
 ```
 
 ### setTitle
 
 Reset modal's dynamic title. (a "modal-title" class with a p HTML tag inside)
 ```js
-	modal.setTitle('My new modal title !');
+	modal.setTitle('My new modal title!');
 ```
 
 ### setTransition
@@ -289,7 +292,7 @@ Here's a good example of how you can deal with one of these methods and combine 
 	It will give to your modal data-status with online as value and data-quantity attributes with 12.
 	You can use this to adapt the style of your modal (*[data-attribute="online"]) or get values with JS for some business.
 
-* ***To add an element so that you can close your modal***, such a button with a "Let's go !" indication, specify a 'modal-close' class to this one. Each DOM element with this class into your content will close the modal with a click.
+* ***To add an element so that you can close your modal***, such a button with a "Let's go!" indication, specify a 'modal-close' class to this one. Each DOM element with this class into your content will close the modal with a click.
 
 ## Licensing
 
