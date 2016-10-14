@@ -8,11 +8,14 @@
 	box-shadow: 0 16px 28px 0 rgba(0,0,0,0.22),0 25px 55px 0 rgba(0,0,0,0.21);
 	-webkit-box-shadow: 0 16px 28px 0 rgba(0,0,0,0.22),0 25px 55px 0 rgba(0,0,0,0.21);
 	display: none;
+	height: auto;
+	max-height: 75%;
+	min-width: 250px;
 	left: 50%;
 	overflow-y: auto;
 	position: fixed;
 	top: 50%;
-	width: 400px;
+	width: auto;
 	z-index: 9999;
 	-moz-transform: translateX(-50%) translateY(-50%);
 	-webkit-transform: translateX(-50%) translateY(-50%);
@@ -95,6 +98,24 @@ body > #modalBackground.show .modal,
 .modal.close {
 	opacity: 0;
 }
+
+/*
+* Fixed modal header
+*/
+	.modal.fixed {
+		overflow: hidden;
+	}
+	.modal.fixed .modal-title {
+		max-height: 50px;
+		overflow: hidden;
+		position: fixed;
+		width: 100%;
+	}
+	.modal.fixed .modal-content {
+		height: 100%;
+		overflow-y: auto;
+		padding-top: 60px;
+	}
 
 /*
 * Animations

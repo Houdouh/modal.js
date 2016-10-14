@@ -44,6 +44,7 @@
 		this.options.content 	    	= ''; // modal's content
 		this.options.customClass    	= ''; // default class set
 		this.options.escapeClose    	= true; // Press 'Esc' will close the modal
+		this.options.headerFixed        = true; // Modal header 'fixed' position
 		this.options.height 	    	= null; // there is no specific height by default (will be 'auto' in CSS)
 		this.options.id 		    	= defaultModalId; // by default a modal has this id
 		this.options.responsive         = true; // modal responsive or not
@@ -445,6 +446,10 @@
 			var header = newModal.querySelector('.modal-title'),
 				content = newModal.querySelector('.modal-content');
 
+			// Add the fixed class to the modal
+			if (header && options.headerFixed)
+				newModal.className += ' fixed';
+
 			// Add the close button to the modal
 			if (options.addCloseBtn)
 				createCloseButton(options,newModal);
@@ -453,9 +458,9 @@
 			*  is invalid (no modal-title or modal-content class)
 			*  throw the error 
 			*/
-			if (header == null && options.title != '')
+			if (!header && options.title != '')
 				throw new Error('(Modal.js) Your template doesn\'t match the model. If you want to set a title, please add a "modal-title" class with a <p> inside.');
-			else if (content == null && options.content != '')
+			else if (!content && options.content != '')
 				throw new Error('(Modal.js) Your template doesn\'t match the model. If you want to set a content, please add a "modal-content" class to your container.');
 
 			// Title
