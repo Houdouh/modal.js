@@ -44,7 +44,7 @@
 		this.options.content 	    	= ''; // modal's content
 		this.options.customClass    	= ''; // default class set
 		this.options.escapeClose    	= true; // Press 'Esc' will close the modal
-		this.options.headerFixed        = true; // Modal header 'fixed' position
+		this.options.headerFixed        = false; // Modal header 'fixed' position
 		this.options.height 	    	= null; // there is no specific height by default (will be 'auto' in CSS)
 		this.options.id 		    	= defaultModalId; // by default a modal has this id
 		this.options.responsive         = true; // modal responsive or not
@@ -62,10 +62,15 @@
 		instances.push(this); // save this instance to get it later
 		if (instances.length > 1) checkUniqueProp(); // check if some properties keep a unique value
 
-		// If a new modal is init after document generation, create it
+		/* 
+		* If a new modal is init after document generation, create it
+		* For modals which are created in the document ready event
+		*/
 		if (body != null) {
 			initDOM(this.dom,this.options); // generate DOM of this modal
 			initialiseModalEvents.call(this); // Init modal events (call the method to get the context)
+
+			if (this.options.autoOpen) this.open(); // Open directly the modal with the option autoOpen
 		}
 	};
 
@@ -657,25 +662,26 @@
 				closeByDOM(e);
 
 				// To avoid trigger several close
-				if ((new RegExp('(^| )' + 'show' + '( |$)', 'gi').test(modalWrapper.className)))
+				if (modalWrapper && (new RegExp('(^| )' + 'show' + '( |$)', 'gi').test(modalWrapper.className)))
 					closeByOverlay(e);
 			});
 
 			document.addEventListener('keydown', function (e) {
 				// If a modal is open and if the key is Esc keycode
-				if ((new RegExp('(^| )' + 'show' + '( |$)', 'gi').test(modalWrapper.className)) && e.keyCode == 27)
+				if (modalWrapper && (new RegExp('(^| )' + 'show' + '( |$)', 'gi').test(modalWrapper.className)) && e.keyCode == 27)
 					closeByEsc();
 			});
 
 			// Resize a responsive modal
 			window.addEventListener('resize', function () {
 				// If a modal is open
-				if ((new RegExp('(^| )' + 'show' + '( |$)', 'gi').test(modalWrapper.className)))
+				if (modalWrapper && (new RegExp('(^| )' + 'show' + '( |$)', 'gi').test(modalWrapper.className)))
 					resizeModal();
 			});
 
 		/*
 		* Finally, the DOM is ready, modals can be created
+		* Only for modals which are created outside the document ready event
 		*/
 		var instance = null;
 		for (var i=0,length=instances.length; i<length; i++) {

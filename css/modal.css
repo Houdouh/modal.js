@@ -104,17 +104,20 @@ body > #modalBackground.show .modal,
 */
 	.modal.fixed {
 		overflow: hidden;
+		padding-top: 50px;
 	}
 	.modal.fixed .modal-title {
-		max-height: 50px;
+		height: 50px;
+		margin: 0;
 		overflow: hidden;
 		position: fixed;
+		top: 0;
 		width: 100%;
 	}
 	.modal.fixed .modal-content {
 		height: 100%;
 		overflow-y: auto;
-		padding-top: 60px;
+		padding-top: 10px;
 	}
 
 /*

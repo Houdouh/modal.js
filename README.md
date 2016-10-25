@@ -90,7 +90,7 @@ Here's an options list for your modal with the default value:
 		content: '', // modal's content (display into the 'modal-content' class of your template)
 		customClass: '', // class in addition to the modal default class
 		escapeClose: true, // Press 'Esc' will close the modal
-		headerFixed: true, // modal's header 'fixed' position
+		headerFixed: false, // modal's header 'fixed' position
 		height: null, // auto CSS value by default. Use an int to set one (400 for example). See 'Modal sizes' section below
 		id: 'modal'+NbModal, // this id needs to be unique. By default, it will be 'modal1' where your modal is the first declared
 		responsive: true, // your modal is reponsive by default (only if a specific width is set, see 'Modal sizes' section below)
