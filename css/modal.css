@@ -64,6 +64,7 @@ body > #modalBackground.show {
 	color: #fff;
 	display: block;
 	font-size: 1.3em;
+	max-width: 90%;
 	padding: 10px 0 10px 5px;
 }
 .modal .modal-title .modal-mainClose {
@@ -110,7 +111,7 @@ body > #modalBackground.show .modal,
 		height: 50px;
 		margin: 0;
 		overflow: hidden;
-		position: fixed;
+		position: absolute;
 		top: 0;
 		width: 100%;
 	}
@@ -119,6 +120,12 @@ body > #modalBackground.show .modal,
 		overflow-y: auto;
 		padding-top: 10px;
 	}
+
+@media (max-width: 700px) {
+	.modal .modal-title p {
+		max-width: 85%;
+	}
+}
 
 /*
 * Animations
