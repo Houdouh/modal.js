@@ -92,6 +92,7 @@ Here's an options list for your modal with the default value:
 		escapeClose: true, // Press 'Esc' will close the modal
 		headerFixed: false, // modal's header 'fixed' position
 		height: null, // auto CSS value by default. Use an int to set one (400 for example). See 'Modal sizes' section below
+		hideOverflow: true, // when modal is open, remove body overflow to avoid scroll behind modal (practice in responsive)
 		id: 'modal'+NbModal, // this id needs to be unique. By default, it will be 'modal1' where your modal is the first declared
 		responsive: true, // your modal is reponsive by default (only if a specific width is set, see 'Modal sizes' section below)
 		responsiveBrink: 50, // in px, will be the separtation between your modal and the window (for each sides, so divided by 2, here it will be 25 to left and right)
