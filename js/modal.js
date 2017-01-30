@@ -46,6 +46,7 @@
 		this.options.escapeClose    	= true; // Press 'Esc' will close the modal
 		this.options.headerFixed        = false; // Modal header 'fixed' position
 		this.options.height 	    	= null; // there is no specific height by default (will be 'auto' in CSS)
+		this.options.hideOverflow		= true; // when modal is open, remove body overflow to avoid scroll behind modal (practice in responsive)
 		this.options.id 		    	= defaultModalId; // by default a modal has this id
 		this.options.responsive         = true; // modal responsive or not
 		this.options.responsiveBrink    = 50; // nb of px that the responsive modal has to leave between window's sides (/2 for each side, so 25 both sides)
@@ -120,6 +121,10 @@
 				modal.style.width = (responsiveBrink > originalWidth ? originalWidth : responsiveBrink)+'px'; // New width can't exceed the original one
 		}
 
+		// hide body overflow
+		if (this.options.hideOverflow)
+			body.className += ' hideOverflow';
+
 		// Trigger opened event (according to the transitionDuration)
 		setTimeout(function () {
 			modal.dispatchEvent(open);
@@ -149,6 +154,10 @@
 			closed      = document.createEvent("CustomEvent");
 		beforeClose.initCustomEvent('beforeClose', false, false, param);
 		closed.initCustomEvent('closed', false, false, param);
+
+		// reset body overflow
+		if (this.options.hideOverflow)
+			body.className = body.className.replace(new RegExp('(^|\\b)' + 'hideOverflow'.split(' ').join('|') + '(\\b|$)', 'gi'), ' '); // remove the 'hideOverflow' class
 
 		// Trigger beforeClose event
 		setTimeout(function () {
