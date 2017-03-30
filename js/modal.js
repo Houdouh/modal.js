@@ -14,8 +14,10 @@
 
 	// The default modal template
 	var modalTemplate = 
-		'<header class="modal-title"><p></p></header>'+
-		'<div class="modal-content"></div>'
+		'<div class="modal-wrapper">'+
+			'<header class="modal-title"><p></p></header>'+
+			'<div class="modal-content"></div>'+
+		'</div>';
 	;
 
 	var instances = [];

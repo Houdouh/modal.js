@@ -4,9 +4,6 @@
  * A really simple, light, efficient, and usefull modal plugin
  */
 .modal {
-	background-color: #fff;
-	box-shadow: 0 16px 28px 0 rgba(0,0,0,0.22),0 25px 55px 0 rgba(0,0,0,0.21);
-	-webkit-box-shadow: 0 16px 28px 0 rgba(0,0,0,0.22),0 25px 55px 0 rgba(0,0,0,0.21);
 	display: none;
 	height: auto;
 	max-height: 75%;
@@ -22,6 +19,13 @@
 	-o-transform: translateX(-50%) translateY(-50%);
 	-ms-transform: translateX(-50%) translateY(-50%);
 	transform: translateX(-50%) translateY(-50%);
+}
+
+.modal-wrapper {
+	background-color: #fff;
+	box-shadow: 0 16px 28px 0 rgba(0,0,0,0.22),0 25px 55px 0 rgba(0,0,0,0.21);
+	-webkit-box-shadow: 0 16px 28px 0 rgba(0,0,0,0.22),0 25px 55px 0 rgba(0,0,0,0.21);
+	position: relative;
 }
 
 .modal .modal-content {
