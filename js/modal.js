@@ -459,7 +459,8 @@
 
 			// Template attribution
 			newModal.innerHTML = options.template;
-			var header = newModal.querySelector('.modal-title'),
+			var wrap = newModal.querySelector('.modal-wrapper'),
+				header = newModal.querySelector('.modal-title'),
 				content = newModal.querySelector('.modal-content');
 
 			// Add the fixed class to the modal
@@ -494,7 +495,7 @@
 				if (options.width < 250)
 					newModal.style.minWidth = options.width+'px';
 			}
-			newModal.style.animationDuration = options.transitionDuration+'ms'; // animation duration
+			wrap.style.animationDuration = options.transitionDuration+'ms'; // animation duration
 			// Children need to be animated too
 			if (options.transition == 'donna') {
 				var children = newModal.childNodes;
