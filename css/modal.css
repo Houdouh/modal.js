@@ -112,21 +112,21 @@ body.hideOverflow {
 /*
 * Fixed modal header
 */
-	.modal.fixed {
-		overflow: hidden;
+	.modal.fixed .modal-wrapper {
+		height: 100%;
+		overflow-y: auto;
 		padding-top: 50px;
 	}
 	.modal.fixed .modal-title {
 		height: 50px;
 		margin: 0;
 		overflow: hidden;
-		position: absolute;
+		position: fixed;
 		top: 0;
 		width: 100%;
+		z-index: 10;
 	}
 	.modal.fixed .modal-content {
-		height: 100%;
-		overflow-y: auto;
 		padding-top: 10px;
 	}
 
