@@ -14,10 +14,8 @@
 
 	// The default modal template
 	var modalTemplate = 
-		'<div class="modal-wrapper">'+
-			'<header class="modal-title"><p></p></header>'+
-			'<div class="modal-content"></div>'+
-		'</div>';
+		'<header class="modal-title"><p></p></header>'+
+		'<div class="modal-content"></div>'
 	;
 
 	var instances = [];
@@ -90,11 +88,18 @@
 		if (isTrigger)
 			return;
 
-		var modal = document.getElementById(this.options.id); // The according modal into the DOM
+		// The according modal into the DOM
+		var modal = document.getElementById(this.options.id),
+			wrap = modal.querySelector('.modal-wrapper');
 
 		isClosable = false;
 
-		modalWrapper.style.transitionDuration = this.options.transitionDuration+'ms'; // set transition duration
+		// Set transition duration
+		wrap.style.transition = 'all '+this.options.transitionDuration+'ms';
+		wrap.style.WebkitTransition = 'all '+this.options.transitionDuration+'ms';
+		wrap.style.MozTransition = 'all '+this.options.transitionDuration+'ms';
+		wrap.style.OTransition = 'all '+this.options.transitionDuration+'ms';
+		wrap.style.msTransition = 'all '+this.options.transitionDuration+'ms';
 
 		// Init custom events with the according context
 		var param = {modal: this, target: target};
@@ -110,7 +115,7 @@
 
 		// Show the modal
 		modalWrapper.className = 'show';
-		this.dom.id.style.display = 'block';
+		this.dom.id.className += ' open';
 
 		// Responsive handling (only if a specific width is set)
 		if (this.options.responsive && this.options.width != null) {
@@ -167,11 +172,11 @@
 		}, 0);
 
 		modalWrapper.className = ''; // remove the 'show' class
+		modal.className = modal.className.replace(new RegExp('(^|\\b)' + 'open'.split(' ').join('|') + '(\\b|$)', 'gi'), ' '); // remove the 'open' class
 		modal.className += ' close';
 		// Hide modal after transition
 		setTimeout(function () {
 			modal.className = modal.className.replace(new RegExp('(^|\\b)' + 'close'.split(' ').join('|') + '(\\b|$)', 'gi'), ' '); // remove the 'close' class
-			modal.style.display = 'none';
 			modal.dispatchEvent(closed); // trigger closed event
 		}, this.options.transitionDuration);
 
@@ -288,7 +293,7 @@
 		var modal = document.getElementById(this.options.id); // The according modal into the DOM
 
 		this.options.template = template;
-		modal.innerHTML = template;
+		modal.querySelector('.modal-wrapper').innerHTML = template;
 
 		var title    = modal.querySelector('.modal-title p'),
 			content  = modal.querySelector('.modal-content');
@@ -439,6 +444,11 @@
 		* Prepare modal template
 		*/
 			var newModal = document.createElement('div');
+
+			// Modal wrapper
+			var newWrapper = document.createElement('div');
+			newWrapper.className = 'modal-wrapper';
+			newModal.appendChild(newWrapper);
 			
 			// Id attribution (the default or the custom one)
 			newModal.id = options.id;
@@ -458,9 +468,10 @@
 			}
 
 			// Template attribution
-			newModal.innerHTML = options.template;
-			var wrap = newModal.querySelector('.modal-wrapper'),
-				header = newModal.querySelector('.modal-title'),
+			var wrap = newModal.querySelector('.modal-wrapper');
+			wrap.innerHTML = options.template;
+
+			var header = newModal.querySelector('.modal-title'),
 				content = newModal.querySelector('.modal-content');
 
 			// Add the fixed class to the modal
@@ -495,14 +506,14 @@
 				if (options.width < 250)
 					newModal.style.minWidth = options.width+'px';
 			}
-			wrap.style.animationDuration = options.transitionDuration+'ms'; // animation duration
+			/*wrap.style.animationDuration = options.transitionDuration+'ms'; // animation duration
 			// Children need to be animated too
 			if (options.transition == 'donna') {
 				var children = newModal.childNodes;
 				for (var i=0,length=children.length; i<length; i++) {
 					children[i].style.animationDuration = options.transitionDuration+'ms';
 				}
-			}
+			}*/
 
 			// Datas-attribute attribution
 			newModal.setAttribute('data-transition',options.transition); // Add transition state
@@ -538,7 +549,7 @@
 		modals = document.querySelectorAll('#modalBackground .modal');
 		// First, find the visible modal
 		for (var i=0,length=modals.length; i<length; i++) {
-			if (modals[i].style.display == 'block') {
+			if (new RegExp('(^| )' + 'open' + '( |$)', 'gi').test(modals[i].className)) { // has 'open' class
 				var instance = findInstance(modals[i].id); // deduce instance of this modal
 				// Conisder this modal only if the responsive option and if a specific width are set
 				if (instance.options.responsive && instance.options.width != null) {
@@ -619,7 +630,7 @@
 					modals = document.querySelectorAll('#modalBackground .modal');
 					// First, find the visible modal
 					for (var i=0,length=modals.length; i<length; i++) {
-						if (modals[i].style.display == 'block') {
+						if (new RegExp('(^| )' + 'open' + '( |$)', 'gi').test(modals[i].className)) { // has 'open' class
 							var instance = findInstance(modals[i].id); // deduce instance of this modal
 							// Close this modal only if the closeByOverlay option is set
 							if (instance.options.closeByOverlay)
@@ -641,7 +652,7 @@
 					modals = document.querySelectorAll('#modalBackground .modal');
 					// First, find the visible modal
 					for (var i=0,length=modals.length; i<length; i++) {
-						if (modals[i].style.display == 'block') {
+						if (new RegExp('(^| )' + 'open' + '( |$)', 'gi').test(modals[i].className)) { // has 'open' class
 							var instance = findInstance(modals[i].id); // deduce instance of this modal
 							instance.close(); // close it
 							break;
@@ -658,7 +669,7 @@
 				modals = document.querySelectorAll('#modalBackground .modal');
 				// First, find the visible modal
 				for (var i=0,length=modals.length; i<length; i++) {
-					if (modals[i].style.display == 'block') {
+					if (new RegExp('(^| )' + 'open' + '( |$)', 'gi').test(modals[i].className)) { // has 'open' class
 						var instance = findInstance(modals[i].id); // deduce instance of this modal
 						// Close this modal only if the escapeClose option is set
 						if (instance.options.escapeClose)

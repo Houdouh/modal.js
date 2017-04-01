@@ -20,7 +20,7 @@ Then, include the style and script as bellow:
 
 ***And jQuery you said?*** As I said before, this plugin needs to be simple and light, no need of jQuery!
 
-***For Internet Explorer users (meh)***: This plugin will works with IE9+, not below!
+***For Internet Explorer users (meh):*** This plugin will works with IE9+, not below!
 
 ## Usage
 
@@ -90,9 +90,7 @@ Here's an options list for your modal with the default value:
 		content: '', // modal's content (display into the 'modal-content' class of your template)
 		customClass: '', // class in addition to the modal default class
 		escapeClose: true, // Press 'Esc' will close the modal
-		headerFixed: false, // modal's header 'fixed' position
 		height: null, // auto CSS value by default. Use an int to set one (400 for example). See 'Modal sizes' section below
-		hideOverflow: true, // when modal is open, remove body overflow to avoid scroll behind modal (practice in responsive)
 		id: 'modal'+NbModal, // this id needs to be unique. By default, it will be 'modal1' where your modal is the first declared
 		responsive: true, // your modal is reponsive by default (only if a specific width is set, see 'Modal sizes' section below)
 		responsiveBrink: 50, // in px, will be the separtation between your modal and the window (for each sides, so divided by 2, here it will be 25 to left and right)
@@ -214,13 +212,6 @@ Reset modal's dynamic title. (a "modal-title" class with a p HTML tag inside)
 	modal.setTitle('My new modal title!');
 ```
 
-### setTransition
-
-Reset modal's transition effect. See Transition effect part into the Tips section for more details 
-```js
-	modal.setTransition('donna'); // you can assign here your own transition reference! But you'll need to defined it into your CSS (see transition effect part for more details)
-```
-
 Here's a good example of how you can deal with one of these methods and combine with an event:
 ```js
 	var myModal = document.getElementById('myModal');
@@ -241,44 +232,6 @@ Here's a good example of how you can deal with one of these methods and combine 
 			closeBtn: '',
 			closeBtnClass: 'fa fa-times'
 		});
-	```
-
-* The CSS of the plugin contains several transition animations for your modal. The default one is a simple animation, the others are:
-	* scale
-	* fall
-	* val (this one will not work well on IE, unfortunately)
-	* donna
-	* don
-
-	These nice animations are taken from [tympanus.net](http://tympanus.net/codrops/) (http://tympanus.net/Development/ModalWindowEffects/ and http://tympanus.net/Development/DialogEffects/). A lot of thanks to these great guys for their work!
-
-	***If you want to create your own transition effect***, you can do this (into a CSS file):
-	```css
-		body > #modalBackground.show .modal[data-transition="myOwnTransition"] {
-			-webkit-animation-name: transition-open;
-			animation-name: transition-open;
-		}
-		.modal.close[data-transition="myOwnTransition"] {
-			-webkit-animation-name: transition-close;
-			animation-name: transition-close;
-		}
-		@-webkit-keyframes transition-open {
-			0% {...}
-			100% {...}
-		}
-		@keyframes transition-open {
-			0% {...}
-			100% {...}
-		}
-
-		@-webkit-keyframes transition-close {
-			0% {...}
-			100% {...}
-		}
-		@keyframes transition-close {
-			0% {...}
-			100% {...}
-		}
 	```
 
 * The option 'attributes' will allow you to add some data informations to your modal. For example:
