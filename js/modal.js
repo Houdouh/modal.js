@@ -718,7 +718,7 @@
 	};
 	// Trigger before any event as ready with jQuery or onload in vanilla
 	document.onreadystatechange = function () {
-		if (document.readyState == 'interactive')
+		if (document.readyState == 'complete')
 			ready();
 	};
 }());

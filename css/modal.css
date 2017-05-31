@@ -104,6 +104,10 @@ body > #modalBackground.show {
 	opacity: 0;
 }
 
+.modal p {
+	margin: 0;
+}
+
 /* Hide overflow */
 body.hideOverflow {
 	overflow: hidden!important;
